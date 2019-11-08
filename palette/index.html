@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>codejam-canvas</title>
+    <title>Palette</title>
     <script src="./index.js" defer></script>
     <link href="./style.css" rel="stylesheet">
   </head>
@@ -19,18 +19,18 @@
         <aside class="options">
           <section class="options--actions">
             <ul class="options--list">
-              <li class="options--list-item"><img src="./assets/images/paint.svg" alt="icon"><div>Paint bucket</div></li>
-              <li class="options--list-item"><img src="./assets/images/choose.svg" alt="icon"><div>Choose color</div></li>
-              <li class="options--list-item"><img src="./assets/images/pencil.svg" alt="icon"><div>Pencil</div></li>
+              <li class="options--list-item" id="bucket"><img src="./assets/images/paint.svg" alt="icon"><div>Paint bucket</div></li>
+              <li class="options--list-item" id="picker"><img src="./assets/images/choose.svg" alt="icon"><div>Choose color</div></li>
+              <li class="options--list-item" id="pencil"><img src="./assets/images/pencil.svg" alt="icon"><div>Pencil</div></li>
               <li class="options--list-item inactive"><img src="./assets/images/transform.svg" alt="icon"><div>Transform</div></li>
             </ul>
           </section>
           <section class="options--colors">
             <ul class="options--list">
-              <li class="options--list-item"><div class="options--circle gray"></div><div>Current color</div></li>
-              <li class="options--list-item"><div class="options--circle green"></div><div>Prev color</div></li>
-              <li class="options--list-item"><div class="options--circle red"></div><div>red</div></li>
-              <li class="options--list-item"><div class="options--circle blue"></div><div>blue</div></li>
+              <li class="options--list-item colors" id="current"><input type="color" value="#00ff00" class="options--circle"><div>Current color</div></li>
+              <li class="options--list-item colors" id="previous"><div class="options--circle gray"></div><div>Prev color</div></li>
+              <li class="options--list-item colors" id="red"><div class="options--circle red"></div><div>red</div></li>
+              <li class="options--list-item colors" id="blue"><div class="options--circle blue"></div><div>blue</div></li>
             </ul>
           </section>
         </aside>
