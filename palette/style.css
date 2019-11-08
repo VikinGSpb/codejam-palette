@@ -152,6 +152,11 @@
 
 .content--canvas {
   outline: 1px solid rgba(0, 0, 0, 0.12);
+  -ms-interpolation-mode: nearest-neighbor;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: -o-pixelated;
+      image-rendering: pixelated;
 }
 
 .active {
