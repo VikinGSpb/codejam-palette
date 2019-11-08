@@ -1,0 +1,151 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.gray {
+  background: #C4C4C4;
+}
+
+.green {
+  background: #41F795;
+}
+
+.red {
+  background: #F74141;
+}
+
+.blue {
+  background: #41B6F7;
+}
+
+.wrapper {
+  width: 1441px;
+  margin: 0 auto;
+
+  font-family: "Roboto";
+
+  @media screen and (max-width: 1440px) {
+    width: 100%;
+  }
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  height: 48px;
+  padding-top: 8px;
+
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 23px;
+  color: rgba(0, 0, 0, 0.87);
+
+  box-shadow: 0 4px 0px 0px rgba(0, 0, 0, 0.12);
+
+  &--nav {
+    flex: 0 0 4%;
+
+    text-align: center;
+  }
+
+  &--title {
+    flex: 0 0 92%;
+    padding-left: 1%;
+  }
+
+  &--menu {
+    flex: 0 0 4%;
+  }
+}
+
+.main {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 79px;
+}
+
+.options {
+  margin: 0 0 0 29px;
+
+  font-size: 16px;
+  line-height: 24px;
+  color: rgba(0, 0, 0, 0.541327);
+
+  &--actions {
+    width: 228px;
+    height: 246px;
+
+    box-shadow: 0 2px 2px 1px rgba(0, 0, 0, 0.12);
+  }
+
+  &--colors {
+    width: 228px;
+    height: 246px;
+    margin-top: 92px;
+
+    box-shadow: 0 2px 2px 1px rgba(0, 0, 0, 0.12);
+  }
+
+  &--list {
+    list-style: none;
+    width: 100%;
+  }
+
+  &--list-item {
+    display: flex;
+    width: 100%;
+    height: 49px;
+    margin-top: 2px;
+    padding-left: 5%;
+  }
+
+  &--colors &--list-item div {
+    text-align: start;
+    padding-left: 20px;
+  }
+
+  &--list-item:nth-child(2) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  }
+
+  &--list-item:hover {
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.12);
+  }
+
+  &--list-item div {
+    width: 75%;
+
+    text-align: center;
+    line-height: 53px;
+  }
+
+  &--circle {
+    flex: 0 0 20px;
+    height: 20px;
+    margin-top: 17px;
+
+    border-radius: 50%;
+    border: 1px solid #000000;
+  }
+}
+
+.content {
+  margin-right: 100px;
+
+  &--canvas {
+    outline: 1px solid rgba(0, 0, 0, 0.12);
+  }
+}
+
+.inactive {
+  opacity: 0.2;
+}
+
+.inactive:hover {
+  background: none;
+  cursor: default;
+}
