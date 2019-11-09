@@ -133,3 +133,18 @@ buttons.forEach((button) => {
         button.classList.add('active');
     });
 });
+
+document.addEventListener('keydown', (e) => {
+    if((e.code === 'KeyB') || (e.code === 'KeyC') || e.code === 'KeyP')
+    {
+        for(let i = 0; i < buttons.length; i++) {
+            if(buttons[i].classList.contains('active')) {
+                buttons[i].classList.remove('active');
+                break;
+            }
+        }
+    }
+    if(e.code === 'KeyB') buttons[0].classList.add('active');
+    if(e.code === 'KeyC') buttons[1].classList.add('active');
+    if(e.code === 'KeyP') buttons[2].classList.add('active');
+})
