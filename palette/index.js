@@ -17,7 +17,34 @@ function changeColor(color) {
     label.style.backgroundColor = currentColor;
 }
 
+function saveState() {
+    let count = 0;
+    for(let yCoordinate = 2; yCoordinate < 512; yCoordinate += 128) {
+        for(let xCoordinate = 2; xCoordinate < 512; xCoordinate += 128) {
+            localStorage.setItem('canvasState' + count, (findColor(xCoordinate, yCoordinate)));
+            count++;
+        }
+    }
+    localStorage.setItem('previousColor', previousColor);
+    localStorage.setItem('currentColor', currentColor);
+}
+
 window.onload = () => {
+    if(localStorage.getItem('currentColor')) currentColor = localStorage.getItem('currentColor');
+    if(localStorage.getItem('previousColor')) previousColor = localStorage.getItem('previousColor');
+    if(localStorage.getItem('canvasState1')) {
+        let array = [];
+        let arr = [];
+        for(let i = 0; i < 16; i++) {
+            array.push(localStorage.getItem('canvasState' + i));
+        }
+        console.log(array);
+        for(let j = 0; j < 15; j+= 4) {
+            arr.push(array.slice(j, j + 5));
+        }
+        console.log(arr);
+        drawFromArr(arr, 1);
+    } else prefillCanvas();
     inputColor.value = currentColor;
     label.style.backgroundColor = currentColor;
     previousColorElement.style.backgroundColor = previousColor;
@@ -34,15 +61,17 @@ window.onload = () => {
     inputColor.select();
 }
 
-function drawFromArr(arr) {
+function drawFromArr(arr, type) {
     if (canvas && canvas.getContext) {
         arr.forEach((row, rowIdx) => {
             row.forEach((column, colIdx) => {
-                if(column.length === 6) {
-                    ctx.fillStyle = "#" + column;
-                } else {
-                    ctx.fillStyle = "rgba(" + column + ")";
-                }
+                if(type === 0) {
+                    if(column.length === 6) {
+                        ctx.fillStyle = "#" + column;
+                    } else {
+                        ctx.fillStyle = "rgba(" + column + ")";
+                    }
+                } else ctx.fillStyle = column;
                 ctx.fillRect(colIdx * 512 / arr.length, rowIdx * 512 / arr.length, (colIdx + 1) * 512 / arr.length, (rowIdx + 1) * 512 / arr.length);
             })
         })
@@ -57,14 +86,12 @@ function prefillCanvas() {
     xhr.onload = () => {
         let arr = [];
         arr = xhr.response;
-        drawFromArr(arr);
+        drawFromArr(arr, 0);
     }
     xhr.onerror = () => {
         throw new Error('Data Error');
     }
 }
-
-prefillCanvas();
 
 function draw(x, y) {
     let startX = 0;
@@ -89,20 +116,30 @@ canvas.addEventListener('mousedown', (e) => {
 
     if(activeButtonId === 'bucket') {
         drawBucket(currentColor);
+        saveState();
     }
 
     if(activeButtonId === 'pencil') {
         pencilDraw(e);
+        saveState();
     }
 
     if(activeButtonId === 'picker') {
-        changeColor(findColor(e));
+        changeColor(findColor(0, 0, e));
     }
 });
 
-function findColor(e) {
-    let x = e.clientX - canvas.offsetLeft;
-    let y = e.clientY - canvas.offsetTop;
+function findColor(...args) {
+    let x;
+    let y;
+    if(args[2]) {
+        x = args[2].clientX - canvas.offsetLeft;
+        y = args[2].clientY - canvas.offsetTop;
+    } else {
+        x = args[0];
+        y = args[1];
+        console.log(x, y);
+    }
     let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     let pixels = imageData.data;
     let pixelRedIndex = ((y - 1) * (imageData.width * 4)) + ((x - 1) * 4);
