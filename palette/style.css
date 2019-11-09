@@ -5,20 +5,12 @@
           box-sizing: border-box;
 }
 
-.gray {
-  background: #C4C4C4;
-}
-
-.green {
-  background: #41F795;
-}
-
 .red {
-  background: #F74141;
+  background-color: #F74141;
 }
 
 .blue {
-  background: #41B6F7;
+  background-color: #41B6F7;
 }
 
 .wrapper {
@@ -144,6 +136,20 @@
   margin-top: 17px;
   border-radius: 50%;
   border: 1px solid #000000;
+}
+
+.options--label {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 20px;
+          flex: 0 0 20px;
+  height: 20px;
+  margin-top: 17px;
+  border-radius: 50%;
+  border: 1px solid #000000;
+}
+
+#inputColor {
+  display: none;
 }
 
 .content {

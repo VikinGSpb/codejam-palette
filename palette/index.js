@@ -1,6 +1,38 @@
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
 const buttons = document.querySelectorAll('.options--list-item:not(.inactive):not(.colors)');
+let currentColor = '#00ff00';
+let previousColor = '#000000';
+const inputColor = document.querySelector('#inputColor');
+const previousColorElement = document.querySelector('#previous');
+const allColors = document.querySelectorAll('.options--circle:not(#inputColor)');
+const label = document.querySelector('#label');
+
+function changeColor(color) {
+    let inter = currentColor;
+    currentColor = color;
+    previousColor = inter;
+    previousColorElement.style.backgroundColor = previousColor;
+    inputColor.value = currentColor;
+    label.style.backgroundColor = currentColor;
+}
+
+window.onload = () => {
+    inputColor.value = currentColor;
+    label.style.backgroundColor = currentColor;
+    previousColorElement.style.backgroundColor = previousColor;
+    allColors.forEach((color) => {
+        color.addEventListener('click', () => {
+            if(color.getAttribute('id') === 'red') changeColor('#F74141');
+            if(color.getAttribute('id') === 'blue') changeColor('#41B6F7');
+            if(color.getAttribute('id') === 'previous') changeColor(previousColor);
+        });
+    });
+    inputColor.addEventListener('change', (e) => {
+        changeColor(e.target.value);
+    });
+    inputColor.select();
+}
 
 function drawFromArr(arr) {
     if (canvas && canvas.getContext) {
@@ -17,7 +49,7 @@ function drawFromArr(arr) {
     } else throw new Error('Canvas Error');
 }
 
-/*function prefillCanvas() {
+function prefillCanvas() {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', 'https://raw.githubusercontent.com/rolling-scopes-school/tasks/master/tasks/stage-2/codejam-canvas/data/4x4.json');
     xhr.responseType = 'json';
@@ -32,7 +64,7 @@ function drawFromArr(arr) {
     }
 }
 
-prefillCanvas();*/
+prefillCanvas();
 
 function draw(x, y) {
     let startX = 0;
@@ -42,19 +74,13 @@ function draw(x, y) {
         if(startX - x >= -128) startX -= 128;
         if(startY - y >= -128) startY -= 128;
     }
-    console.log(startX, startY);
-    let finX = startX + 128;
-    let finY = startY + 128;
-    console.log(finX, finY);
     if(canvas && canvas.getContext) {
-        ctx.fillStyle = '#00ff00';
-        ctx.fillRect(startX, startY, finX, finY);
-        console.log(startX, startY);
-        console.log(finX, finY);
+        ctx.fillStyle = currentColor;
+        ctx.fillRect(startX, startY, 128, 128);
     } else throw new Error('Canvas Error');
 }
 
-canvas.addEventListener('mouseup', (e) => {
+canvas.addEventListener('mousedown', (e) => {
     let activeButtonId;
     buttons.forEach((button) => {
         if(button.classList.contains('active')) activeButtonId = button.getAttribute('id');
@@ -62,13 +88,27 @@ canvas.addEventListener('mouseup', (e) => {
     console.log(activeButtonId);
 
     if(activeButtonId === 'bucket') {
-        drawBucket('000000');
+        drawBucket(currentColor);
     }
 
     if(activeButtonId === 'pencil') {
         pencilDraw(e);
     }
-})
+
+    if(activeButtonId === 'picker') {
+        changeColor(findColor(e));
+    }
+});
+
+function findColor(e) {
+    let x = e.clientX - canvas.offsetLeft;
+    let y = e.clientY - canvas.offsetTop;
+    let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    let pixels = imageData.data;
+    let pixelRedIndex = ((y - 1) * (imageData.width * 4)) + ((x - 1) * 4);
+    let pixelColor = "rgba("+pixels[pixelRedIndex]+", "+pixels[pixelRedIndex+1]+", "+pixels[pixelRedIndex+2]+", "+(pixels[pixelRedIndex+3]/255)+")";
+    return pixelColor;
+}
 
 function pencilDraw(e) {
     let x = e.clientX - canvas.offsetLeft;
@@ -79,11 +119,7 @@ function pencilDraw(e) {
 
 function drawBucket(color) {
     if (canvas && canvas.getContext) {
-        if(color.length === 6) {
-            ctx.fillStyle = "#" + color;
-        } else {
-            ctx.fillStyle = "rgba(" + color + ")";
-        }
+        ctx.fillStyle = color;
         ctx.fillRect(0, 0, 512, 512);
     } else throw new Error('Canvas Error');
 }
