@@ -7,6 +7,9 @@ const inputColor = document.querySelector('#inputColor');
 const previousColorElement = document.querySelector('#previous');
 const allColors = document.querySelectorAll('.options--circle:not(#inputColor)');
 const label = document.querySelector('#label');
+let handle = true;
+let firstPoint = [0, 0];
+let secondPoint = [0, 0];
 
 function changeColor(color) {
     let inter = currentColor;
@@ -15,6 +18,7 @@ function changeColor(color) {
     previousColorElement.style.backgroundColor = previousColor;
     inputColor.value = currentColor;
     label.style.backgroundColor = currentColor;
+    saveState();
 }
 
 function saveState() {
@@ -38,11 +42,9 @@ window.onload = () => {
         for(let i = 0; i < 16; i++) {
             array.push(localStorage.getItem('canvasState' + i));
         }
-        console.log(array);
         for(let j = 0; j < 15; j+= 4) {
             arr.push(array.slice(j, j + 5));
         }
-        console.log(arr);
         drawFromArr(arr, 1);
     } else prefillCanvas();
     inputColor.value = currentColor;
@@ -105,6 +107,31 @@ function draw(x, y) {
         ctx.fillStyle = currentColor;
         ctx.fillRect(startX, startY, 128, 128);
     } else throw new Error('Canvas Error');
+    return [startX, startX + 129, startY, startY + 129];
+}
+
+function BrezAlg(x1, x2, y1, y2) {
+    let deltaX = Math.abs(x2 - x1);
+    let deltaY = Math.abs(y2 - y1);
+    let signX = x1 < x2 ? 1 : -1;
+    let signY = y1 < y2 ? 1 : -1;
+    let error = deltaX - deltaY;
+    draw(x2, y2);
+    while(x1 !== x2 || y1 !== y2) 
+    {
+        draw(x1, y1);
+        let error2 = error * 2;
+        if(error2 > -deltaY) 
+        {
+            error -= deltaY;
+            x1 += signX;
+        }
+        if(error2 < deltaX) 
+        {
+            error += deltaX;
+            y1 += signY;
+        }
+    }
 }
 
 canvas.addEventListener('mousedown', (e) => {
@@ -112,22 +139,44 @@ canvas.addEventListener('mousedown', (e) => {
     buttons.forEach((button) => {
         if(button.classList.contains('active')) activeButtonId = button.getAttribute('id');
     });
-    console.log(activeButtonId);
-
     if(activeButtonId === 'bucket') {
         drawBucket(currentColor);
         saveState();
     }
 
     if(activeButtonId === 'pencil') {
+        handle = true;
         pencilDraw(e);
         saveState();
+        canvas.addEventListener('mouseup', () => {
+            handle = false;
+            firstPoint = [0, 0];
+            secondPoint = [0, 0];
+            saveState();
+        });
+        canvas.addEventListener('mousemove', (e) => {
+            if(handle === true) {
+                firstPoint[0] = secondPoint[0];
+                firstPoint[1] = secondPoint[1];
+                let inter = pencilDraw(e);
+                console.log(inter);
+                secondPoint[0] = inter[0];
+                secondPoint[1] = inter[2];
+                if((Math.abs(firstPoint[0] - secondPoint[0]) > 130 || Math.abs(firstPoint[1] - secondPoint[1]) > 130) && firstPoint[0] > 0)
+                {
+                    BrezAlg(firstPoint[0], secondPoint[0], firstPoint[1], secondPoint[1]);
+                }
+                saveState();
+                console.log(firstPoint, secondPoint);
+            }
+        });
     }
 
     if(activeButtonId === 'picker') {
         changeColor(findColor(0, 0, e));
     }
 });
+
 
 function findColor(...args) {
     let x;
@@ -138,7 +187,6 @@ function findColor(...args) {
     } else {
         x = args[0];
         y = args[1];
-        console.log(x, y);
     }
     let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     let pixels = imageData.data;
@@ -150,8 +198,10 @@ function findColor(...args) {
 function pencilDraw(e) {
     let x = e.clientX - canvas.offsetLeft;
     let y = e.clientY - canvas.offsetTop;
-    console.log(x, y);
-    draw(x, y);
+    let arr = draw(x, y);
+    let result = [];
+    arr.map((x,i) => {result[i] = x;});
+    return result;
 }
 
 function drawBucket(color) {
@@ -165,8 +215,7 @@ buttons.forEach((button) => {
     button.addEventListener('click', () => {
         for(let i = 0; i < buttons.length; i++) {
             if(buttons[i].classList.contains('active')) buttons[i].classList.remove('active') ;
-        }
-        
+        }       
         button.classList.add('active');
     });
 });
