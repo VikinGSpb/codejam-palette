@@ -28,15 +28,12 @@ function findColor(...args) {
 }
 
 function saveState() {
-  let count = 0;
-  for (let yCoordinate = 2; yCoordinate < 512; yCoordinate += 128) {
-    for (let xCoordinate = 2; xCoordinate < 512; xCoordinate += 128) {
-      localStorage.setItem(`canvasState${count}`, (findColor(xCoordinate, yCoordinate)));
-      count += 1;
-    }
-  }
-  localStorage.setItem('previousColor', previousColor);
-  localStorage.setItem('currentColor', currentColor);
+  try {
+    localStorage.setItem('previousColor', previousColor);
+    localStorage.setItem('currentColor', currentColor);
+    const currentImage = canvas.toDataURL();
+    localStorage.setItem('canvasImage', currentImage);
+  } catch (e) { console.log('LocalStorage error'); }
 }
 
 function changeColor(color) {
@@ -73,9 +70,7 @@ function prefillCanvas() {
   xhr.responseType = 'json';
   xhr.send();
   xhr.onload = () => {
-    let arr = [];
-    arr = xhr.response;
-    drawFromArr(arr, 0);
+    drawFromArr(xhr.response, 0);
   };
   xhr.onerror = () => {
     throw new Error('Data Error');
@@ -83,27 +78,29 @@ function prefillCanvas() {
 }
 
 window.onload = () => {
-  if (localStorage.getItem('currentColor')) currentColor = localStorage.getItem('currentColor');
-  if (localStorage.getItem('previousColor')) previousColor = localStorage.getItem('previousColor');
-  if (localStorage.getItem('canvasState1')) {
-    const array = [];
-    const arr = [];
-    for (let i = 0; i < 16; i += 1) {
-      array.push(localStorage.getItem(`canvasState${i}`));
-    }
-    for (let j = 0; j < 15; j += 4) {
-      arr.push(array.slice(j, j + 5));
-    }
-    drawFromArr(arr, 1);
-  } else prefillCanvas();
+  try {
+    if (localStorage.getItem('currentColor')) currentColor = localStorage.getItem('currentColor');
+    if (localStorage.getItem('previousColor')) previousColor = localStorage.getItem('previousColor');
+    if (localStorage.getItem('canvasImage')) {
+      const canvasImg = new Image();
+      const dataUrl = localStorage.getItem('canvasImage');
+      canvasImg.src = dataUrl;
+      canvasImg.onload = () => {
+        ctx.drawImage(canvasImg, 0, 0);
+      };
+    } else prefillCanvas();
+  } catch (e) { console.log('LocalStorage errors'); }
   inputColor.value = currentColor;
   label.style.backgroundColor = currentColor;
   previousColorElement.style.backgroundColor = previousColor;
   allColors.forEach((color) => {
     color.addEventListener('click', () => {
-      if (color.getAttribute('id') === 'red') changeColor('#F74141');
-      if (color.getAttribute('id') === 'blue') changeColor('#41B6F7');
-      if (color.getAttribute('id') === 'previous') changeColor(previousColor);
+      switch (color.getAttribute('id')) {
+        case 'red': changeColor('#F74141'); break;
+        case 'blue': changeColor('#41B6F7'); break;
+        case 'previous': changeColor(previousColor); break;
+        default: break;
+      }
     });
   });
   inputColor.addEventListener('change', (e) => {
@@ -153,13 +150,7 @@ function BrezAlg(x1, x2, y1, y2) {
 function pencilDraw(e) {
   const x = e.clientX - canvas.offsetLeft;
   const y = e.clientY - canvas.offsetTop;
-  const arr = draw(x, y);
-  const result = [];
-  arr.map((elem, idx) => {
-    result[idx] = elem;
-    return true;
-  });
-  return result;
+  return draw(x, y);
 }
 
 function drawBucket(color) {
@@ -198,7 +189,6 @@ canvas.addEventListener('mousedown', (e) => {
         || Math.abs(firstPoint[1] - secondPoint[1]) > 130) && firstPoint[0] > 0) {
           BrezAlg(firstPoint[0], secondPoint[0], firstPoint[1], secondPoint[1]);
         }
-        saveState();
       }
     });
   }
@@ -218,15 +208,9 @@ buttons.forEach((button) => {
 });
 
 document.addEventListener('keydown', (e) => {
-  if ((e.code === 'KeyB') || (e.code === 'KeyC') || e.code === 'KeyP') {
-    for (let i = 0; i < buttons.length; i += 1) {
-      if (buttons[i].classList.contains('active')) {
-        buttons[i].classList.remove('active');
-        break;
-      }
-    }
+  const keys = ['KeyB', 'KeyC', 'KeyP'];
+  if (keys.includes(e.code)) {
+    buttons.forEach((button) => button.classList.remove('active'));
   }
-  if (e.code === 'KeyB') buttons[0].classList.add('active');
-  if (e.code === 'KeyC') buttons[1].classList.add('active');
-  if (e.code === 'KeyP') buttons[2].classList.add('active');
+  keys.forEach((key, keyIdx) => e.code === key && buttons[keyIdx].classList.add('active'));
 });
