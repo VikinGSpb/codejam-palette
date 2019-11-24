@@ -41,21 +41,21 @@
           box-shadow: 0 4px 0px 0px rgba(0, 0, 0, 0.12);
 }
 
-.header--nav {
+.header__nav {
   -webkit-box-flex: 0;
       -ms-flex: 0 0 4%;
           flex: 0 0 4%;
   text-align: center;
 }
 
-.header--title {
+.header__title {
   -webkit-box-flex: 0;
       -ms-flex: 0 0 92%;
           flex: 0 0 92%;
   padding-left: 1%;
 }
 
-.header--menu {
+.header__menu {
   -webkit-box-flex: 0;
       -ms-flex: 0 0 4%;
           flex: 0 0 4%;
@@ -78,14 +78,14 @@
   color: rgba(0, 0, 0, 0.541327);
 }
 
-.options--actions {
+.options__actions {
   width: 228px;
   height: 246px;
   -webkit-box-shadow: 0 2px 2px 1px rgba(0, 0, 0, 0.12);
           box-shadow: 0 2px 2px 1px rgba(0, 0, 0, 0.12);
 }
 
-.options--colors {
+.options__colors {
   width: 228px;
   height: 246px;
   margin-top: 92px;
@@ -93,12 +93,12 @@
           box-shadow: 0 2px 2px 1px rgba(0, 0, 0, 0.12);
 }
 
-.options--list {
+.options__list {
   list-style: none;
   width: 100%;
 }
 
-.options--list-item {
+.options__list_item {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -108,27 +108,27 @@
   padding-left: 5%;
 }
 
-.options--colors .options--list-item div {
+.options__colors .options__list_item div {
   text-align: start;
   padding-left: 20px;
 }
 
-.options--list-item:nth-child(2) {
+.options__list_item:nth-child(2) {
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
 
-.options--list-item:hover {
+.options__list_item:hover {
   cursor: pointer;
   background: rgba(0, 0, 0, 0.12);
 }
 
-.options--list-item div {
+.options__list_item div {
   width: 75%;
   text-align: center;
   line-height: 53px;
 }
 
-.options--circle {
+.options__circle {
   -webkit-box-flex: 0;
       -ms-flex: 0 0 20px;
           flex: 0 0 20px;
@@ -138,7 +138,7 @@
   border: 1px solid #000000;
 }
 
-.options--label {
+.options__label {
   -webkit-box-flex: 0;
       -ms-flex: 0 0 20px;
           flex: 0 0 20px;
@@ -156,7 +156,7 @@
   margin-right: 100px;
 }
 
-.content--canvas {
+.content__canvas {
   outline: 1px solid rgba(0, 0, 0, 0.12);
   -ms-interpolation-mode: nearest-neighbor;
       image-rendering: -webkit-optimize-contrast;

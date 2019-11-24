@@ -37,18 +37,18 @@
 
   box-shadow: 0 4px 0px 0px rgba(0, 0, 0, 0.12);
 
-  &--nav {
+  &__nav {
     flex: 0 0 4%;
 
     text-align: center;
   }
 
-  &--title {
+  &__title {
     flex: 0 0 92%;
     padding-left: 1%;
   }
 
-  &--menu {
+  &__menu {
     flex: 0 0 4%;
   }
 }
@@ -66,14 +66,14 @@
   line-height: 24px;
   color: rgba(0, 0, 0, 0.541327);
 
-  &--actions {
+  &__actions {
     width: 228px;
     height: 246px;
 
     box-shadow: 0 2px 2px 1px rgba(0, 0, 0, 0.12);
   }
 
-  &--colors {
+  &__colors {
     width: 228px;
     height: 246px;
     margin-top: 92px;
@@ -81,12 +81,12 @@
     box-shadow: 0 2px 2px 1px rgba(0, 0, 0, 0.12);
   }
 
-  &--list {
+  &__list {
     list-style: none;
     width: 100%;
   }
 
-  &--list-item {
+  &__list_item {
     display: flex;
     width: 100%;
     height: 49px;
@@ -94,28 +94,28 @@
     padding-left: 5%;
   }
 
-  &--colors &--list-item div {
+  &__colors &__list_item div {
     text-align: start;
     padding-left: 20px;
   }
 
-  &--list-item:nth-child(2) {
+  &__list_item:nth-child(2) {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   }
 
-  &--list-item:hover {
+  &__list_item:hover {
     cursor: pointer;
     background: rgba(0, 0, 0, 0.12);
   }
 
-  &--list-item div {
+  &__list_item div {
     width: 75%;
 
     text-align: center;
     line-height: 53px;
   }
 
-  &--circle {
+  &__circle {
     flex: 0 0 20px;
     height: 20px;
     margin-top: 17px;
@@ -124,7 +124,7 @@
     border: 1px solid #000000;
   }
 
-  &--label {
+  &__label {
     flex: 0 0 20px;
     height: 20px;
     margin-top: 17px;
@@ -141,7 +141,7 @@
 .content {
   margin-right: 100px;
 
-  &--canvas {
+  &__canvas {
     outline: 1px solid rgba(0, 0, 0, 0.12);
     image-rendering: pixelated;
   }

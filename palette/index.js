@@ -1,11 +1,11 @@
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
-const buttons = document.querySelectorAll('.options--list-item:not(.inactive):not(.colors)');
+const buttons = document.querySelectorAll('.options__list_item:not(.inactive):not(.colors)');
 let currentColor = '#00ff00';
 let previousColor = '#000000';
 const inputColor = document.querySelector('#inputColor');
 const previousColorElement = document.querySelector('#previous');
-const allColors = document.querySelectorAll('.options--circle:not(#inputColor)');
+const allColors = document.querySelectorAll('.options__circle:not(#inputColor)');
 const label = document.querySelector('#label');
 let handle = true;
 let firstPoint = [0, 0];
